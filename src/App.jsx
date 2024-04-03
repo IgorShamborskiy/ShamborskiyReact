@@ -1,30 +1,45 @@
+import { useState } from 'react';
 
-// src/components/App.jsx
-
-
- 
-// src/components/App.jsx
-
-import { Alert } from "./Alert";
-
-export default function App(){
+const CustomButton = ({ message, children }) => {
   return (
-    <>
-      <Alert variant="info">
-        Would you like to browse our recommended products?
-      </Alert>
-      <Alert variant="error">
-        There was an error during your last transaction
-      </Alert>
-      <Alert variant="success">
-        Payment received, thank you for your purchase
-      </Alert>
-      <Alert variant="warning">
-        Please update your profile contact information
-      </Alert>
-    </>
+    <button onClick={() => alert(message)}>
+      {children}
+    </button>
+  );
+};
+
+const App = () => {
+  const [values, setValues] = useState({
+    x: 0,
+    y: 0,
+	  });
+	
+	const updateX = () => {
+			setValues({
+			...values,
+			x: values.x + 1
+		});
+	};
+
+	const updateY = () => {
+		setValues({
+			...values,
+			y: values.y + 1
+		});
+	};
+
+  return (
+    <div>
+      <p>
+        x: {values.x}, y: {values.y}
+      </p>
+
+      <button onClick={updateX}>Update x</button>
+      <button onClick={updateY}>Update y</button>
+    </div>
   );
 };
 
 
-// export default App;
+
+export default App;
