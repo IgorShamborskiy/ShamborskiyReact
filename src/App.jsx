@@ -1,44 +1,33 @@
-import { useState } from 'react';
-
-const CustomButton = ({ message, children }) => {
-  return (
-    <button onClick={() => alert(message)}>
-      {children}
-    </button>
-  );
-};
-
+import { useState, useEffect } from "react";
 const App = () => {
-  const [values, setValues] = useState({
-    x: 0,
-    y: 0,
-	  });
-	
-	const updateX = () => {
-			setValues({
-			...values,
-			x: values.x + 1
-		});
-	};
+  const [first, setFirst] = useState(0);
+  const [second, setSecond] = useState(0);
 
-	const updateY = () => {
-		setValues({
-			...values,
-			y: values.y + 1
-		});
-	};
+  useEffect(() => {
+    console.log("First updated: ", first);
+  }, [first]);
+
+  useEffect(() => {
+    console.log("Second updated: ", second);
+  }, [second]);
+
+  useEffect(() => {
+    console.log("First or second updated: ", first + second);
+  }, [first, second]);
 
   return (
-    <div>
-      <p>
-        x: {values.x}, y: {values.y}
-      </p>
-
-      <button onClick={updateX}>Update x</button>
-      <button onClick={updateY}>Update y</button>
-    </div>
+    <>
+      <button onClick={() => setFirst(first + 1)}>First: {first}</button>
+      <button onClick={() => setSecond(second + 1)}>Second: {second}</button>
+    </>
   );
 };
+
+
+
+
+
+
 
 
 
