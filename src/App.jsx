@@ -1,34 +1,25 @@
 import { useState, useEffect } from "react";
-const App = () => {
-  const [first, setFirst] = useState(0);
-  const [second, setSecond] = useState(0);
+import { useId } from 'react';
 
-  useEffect(() => {
-    console.log("First updated: ", first);
-  }, [first]);
 
-  useEffect(() => {
-    console.log("Second updated: ", second);
-  }, [second]);
-
-  useEffect(() => {
-    console.log("First or second updated: ", first + second);
-  }, [first, second]);
+const App =() => {
+  const selectId = useId();
+  const [lang, setLang] = useState("uk");
 
   return (
-    <>
-      <button onClick={() => setFirst(first + 1)}>First: {first}</button>
-      <button onClick={() => setSecond(second + 1)}>Second: {second}</button>
-    </>
+    <div>
+      <label htmlFor={selectId}>Choose language</label>
+      <select
+        id={selectId}
+        value={lang}
+        onChange={(evt) => setLang(evt.target.value)}
+      >
+        <option value="uk">Ukrainian</option>
+        <option value="en">English</option>
+        <option value="pl">Polish</option>
+      </select>
+    </div>
   );
 };
-
-
-
-
-
-
-
-
 
 export default App;
