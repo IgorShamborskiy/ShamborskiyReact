@@ -1,73 +1,61 @@
-import { useState, useEffect } from "react";
-import { useId } from 'react';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from "yup";
-import { ErrorMessage } from "formik";
+// import { useState, useEffect } from "react";
+// import { useId } from 'react';
+// import { Formik, Form, Field } from 'formik';
+// import * as Yup from "yup";
+// import { ErrorMessage } from "formik";
+// import axios from "axios";
 
-const FeedbackSchema = Yup.object().shape({
-  username: Yup.string().min(2, "Too Short!").max(50, "Too Long!").required("Required"),
-  email: Yup.string().email("Must be a valid email!").required("Required"),
-  message: Yup.string().min(3, "Too short").max(256, "Too long").required("Required"),
-  level: Yup.string().oneOf(["good", "neutral", "bad"]).required("Required"),
-});
 
-const initialValues = {
-  username: "",
-  email: "",
-  message: "",
-  level: "good",
-};
-  
+// const FeedbackSchema = Yup.object().shape({
+//   username: Yup.string().min(2, "Too Short!").max(50, "Too Long!").required("Required"),
+//   email: Yup.string().email("Must be a valid email!").required("Required"),
+//   message: Yup.string().min(3, "Too short").max(256, "Too long").required("Required"),
+//   level: Yup.string().oneOf(["good", "neutral", "bad"]).required("Required"),
+// });
 
-const App =() => {
-  const nameFieldId = useId();
-  const emailFieldId = useId();
-  const msgFieldId = useId();
-  const levelFieldId = useId();
+// const initialValues = {
+//   username: "",
+//   email: "",
+//   message: "",
+//   level: "good",
+// };
 
-  const handleSubmit = (values, actions) => {
-    console.log(values);
-    actions.resetForm();
-  };
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { fetchArticlesWithTopic } from "./articles-api";
 
-  return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      validationSchema={FeedbackSchema}
-    >
-      <Form>
-        <div>
-          <label htmlFor={nameFieldId}>Username</label>
-          <Field type="text" name="username" id={nameFieldId} />
-          <ErrorMessage name="username" component="span" />
-        </div>
 
-        <div>
-          <label htmlFor={emailFieldId}>Email</label>
-          <Field type="email" name="email" id={emailFieldId} />
-          <ErrorMessage name="email" component="span" />
-        </div>
+const App = () => {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-        <div>
-          <label htmlFor={msgFieldId}>Message</label>
-          <Field as="textarea" name="message" id={msgFieldId} rows="5" />
-          <ErrorMessage name="message" component="span" />
-        </div>
+  useEffect(() => {
+    async function fetchArticles() {
+      try {
+        setLoading(true);
+				// 2. Використовуємо HTTP-функцію
+				const data = await fetchArticlesWithTopic("react");
+        setArticles(data);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
 
-        <div>
-          <label htmlFor={levelFieldId}>Service satisfaction level</label>
-          <Field as="select" name="level" id={levelFieldId}>
-            <option value="good">Good</option>
-            <option value="neutral">Neutral</option>
-            <option value="bad">Bad</option>
-          </Field>
-          <ErrorMessage name="level" component="span" />
-        </div>
+    fetchArticles();
+  }, []);
 
-        <button type="submit">Submit</button>
-      </Form>
-    </Formik>
+	return (
+    <div>
+      <h1>Latest articles</h1>
+      {loading && <p>Loading data, please wait...</p>}
+      {error && (
+        <p>Whoops, something went wrong! Please try reloading this page!</p>
+      )}
+      {articles.length > 0 && <ArticleList items={articles} />}
+    </div>
   );
 };
 
