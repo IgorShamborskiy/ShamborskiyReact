@@ -23,40 +23,31 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { fetchArticlesWithTopic } from "./articles-api";
+import { useMemo } from "react";
+import { forwardRef, useRef } from "react";
 
+const Player = ({ source }) => {
+  const playerRef = useRef();
 
-const App = () => {
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const play = () => playerRef.current.play();
 
-  useEffect(() => {
-    async function fetchArticles() {
-      try {
-        setLoading(true);
-				// 2. Використовуємо HTTP-функцію
-				const data = await fetchArticlesWithTopic("react");
-        setArticles(data);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    }
+  const pause = () => playerRef.current.pause();
 
-    fetchArticles();
-  }, []);
-
-	return (
+  return (
     <div>
-      <h1>Latest articles</h1>
-      {loading && <p>Loading data, please wait...</p>}
-      {error && (
-        <p>Whoops, something went wrong! Please try reloading this page!</p>
-      )}
-      {articles.length > 0 && <ArticleList items={articles} />}
+      <video ref={playerRef} src={source}>
+        Sorry, your browser does not support embedded videos.
+      </video>
+      <div>
+        <button onClick={play}>Play</button>
+        <button onClick={pause}>Pause</button>
+      </div>
     </div>
   );
+};
+
+const App = () => {
+  return <Player source="<http://media.w3.org/2010/05/sintel/trailer.mp4>" />;
 };
 
 export default App;
