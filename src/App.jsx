@@ -1,29 +1,37 @@
 import { Routes, Route, Link } from "react-router-dom";
-import Home from 'path/to/pages/Home'
-import About from "path/to/pages/About";
-import Products from "path/to/pages/Products";
-import NotFound from "path/to/pages/NotFound";
-import ProductDetails from 'path/to/pages/ProductDetails';
+import { useState } from 'react'
 
  const App = () => {
+  const [values, setValues] = useState({
+    x: 0,
+    y: 0,
+	  });
+	
+	const updateX = () => {
+			setValues({
+			...values,
+			x: values.x + 1
+		});
+	};
+
+	const updateY = () => {
+		setValues({
+			...values,
+			y: values.y + 1
+		});
+	};
+
   return (
     <div>
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
-        <Link to="/products">Products</Link>
-      </nav>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/:productId" element={<ProductDetails />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <p>
+        x: {values.x}, y: {values.y}
+      </p>
+
+      <button onClick={updateX}>Update x</button>
+      <button onClick={updateY}>Update y</button>
     </div>
   );
 };
-
 
 
 export default App;
