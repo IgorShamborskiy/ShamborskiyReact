@@ -1,53 +1,29 @@
-// import { useState, useEffect } from "react";
-// import { useId } from 'react';
-// import { Formik, Form, Field } from 'formik';
-// import * as Yup from "yup";
-// import { ErrorMessage } from "formik";
-// import axios from "axios";
+import { Routes, Route, Link } from "react-router-dom";
+import Home from 'path/to/pages/Home'
+import About from "path/to/pages/About";
+import Products from "path/to/pages/Products";
+import NotFound from "path/to/pages/NotFound";
+import ProductDetails from 'path/to/pages/ProductDetails';
 
-
-// const FeedbackSchema = Yup.object().shape({
-//   username: Yup.string().min(2, "Too Short!").max(50, "Too Long!").required("Required"),
-//   email: Yup.string().email("Must be a valid email!").required("Required"),
-//   message: Yup.string().min(3, "Too short").max(256, "Too long").required("Required"),
-//   level: Yup.string().oneOf(["good", "neutral", "bad"]).required("Required"),
-// });
-
-// const initialValues = {
-//   username: "",
-//   email: "",
-//   message: "",
-//   level: "good",
-// };
-
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { fetchArticlesWithTopic } from "./articles-api";
-import { useMemo } from "react";
-import { forwardRef, useRef } from "react";
-
-const Player = ({ source }) => {
-  const playerRef = useRef();
-
-  const play = () => playerRef.current.play();
-
-  const pause = () => playerRef.current.pause();
-
+ const App = () => {
   return (
     <div>
-      <video ref={playerRef} src={source}>
-        Sorry, your browser does not support embedded videos.
-      </video>
-      <div>
-        <button onClick={play}>Play</button>
-        <button onClick={pause}>Pause</button>
-      </div>
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+        <Link to="/products">Products</Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/products/:productId" element={<ProductDetails />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </div>
   );
 };
 
-const App = () => {
-  return <Player source="<http://media.w3.org/2010/05/sintel/trailer.mp4>" />;
-};
+
 
 export default App;
